@@ -33,6 +33,7 @@ Route::get('/testhero', function (Request $request) {
 
 Route::get('events/{id}/comments', "CommentController@getCommentsFromId");
 Route::post('events/{event}/comments', "CommentController@store");
-
+Route::put('comments/edit', "CommentController@update")->name('comments.update');
 Route::delete('comments/{comment}/delete', 'CommentController@destroy')->name('comments.destroy');
+
 // Route::get('/events', 'EventController@index')->name('event.index');

@@ -10,7 +10,7 @@ use Illuminate\Http\Request;
 class CommentController extends Controller
 {
 	public function __construct(){
-		$this->middleware('jwt.auth')->only(['store', 'destroy']);
+		$this->middleware('jwt.auth')->only(['store', 'destroy', 'update']);
 	}
 
     public function getCommentsFromId($eventId)
@@ -31,6 +31,17 @@ class CommentController extends Controller
     	return response()->json(['message' => 'Comment stored!', 'data' => $comment]);
     }
 
+    public function update(Request $request)
+    {
+        $user = JWTAuth::parseToken()->toUser();
+        $comment = Comment::find($request->input('comment_id'));
+        if($user->id != $comment->user_id) {
+            return response()->json(['message' => $comment], 403);
+        }
+        $comment->update(['content' => $request->input('content')]);
+        return response()->json(['message' => 'Comment edited!']);
+    }
+
     public function destroy(Request $request, Comment $comment)
     {
     	$user = JWTAuth::parseToken()->toUser();
@@ -39,5 +50,5 @@ class CommentController extends Controller
     	}
     	$comment->delete();
     	return response()->json(['message' => 'Comment deleted!']);
-    }	
+    }
 }

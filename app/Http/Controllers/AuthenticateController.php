@@ -32,11 +32,12 @@ class AuthenticateController extends Controller
 
     public function login(Request $request)
     {
+        // dd("yolo");
     	$credentials = $request->only('email', 'password');
     	try {
     		if (! $token = JWTAuth::attempt($credentials)) {
-    			return response()->json(['error' => 'invalid_credentials'], 401);
-    		} 
+    			return response()->json(['error' => 'Invalid credentials'], 401);
+    		}
     	} catch (JWTException $e) {
             return response()->json(['error' => 'could_not_create_token'], 500);
         }
@@ -55,6 +56,6 @@ class AuthenticateController extends Controller
     public function logout(Request $request)
     {
 		JWTAuth::invalidate();
-		return response()->json(['message' => 'Logged out successfully']);    	
+		return response()->json(['message' => 'Logged out successfully']);
     }
 }

@@ -10,7 +10,7 @@ class EventController extends Controller
 {
 
     public function __construct(){
-        $this->middleware(['jwt.refresh'])->only(['store', 'update', 'destroy']);    
+        $this->middleware(['jwt.auth'])->only(['store', 'update', 'destroy']);
     }
     /**
      * Display a listing of the resource.
