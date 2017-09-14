@@ -20,6 +20,8 @@ class CreateEventsTable extends Migration
             $table->string('address');
             $table->integer('user_id')->unsigned();
             $table->foreign('user_id')->references('id')->on('users');
+            $table->float("latitude");
+            $table->float("longitude");
             $table->datetime('begin_at');
             $table->datetime('end_at');
             $table->timestamps();

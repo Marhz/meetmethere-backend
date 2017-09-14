@@ -19,8 +19,8 @@ Route::middleware('auth:api')->get('/user', function (Request $request) {
 
 Route::post('/register', 'AuthenticateController@register')->name('auth.register');
 Route::post('/login', 'AuthenticateController@login')->name('auth.login');
+Route::get('/events/map', 'EventMapController@index')->name('events.map.index');
 
-Route::get('/test', 'AuthenticateController@test')->name('test');
 Route::resource('/events', 'EventController');
 
 route::get('/logout', 'AuthenticateController@logout');

@@ -41,7 +41,6 @@ class EventsApiTest extends TestCase
 		$this->setClientToken();
 		$event = make('App\Event');
 		$response = $this
-			// ->json('post', "http://meetmethere.dev/api/events?token={$this->userToken}", $event->toArray())
 			->json('post', route('events.store', ['token' => $this->userToken]), $event->toArray())
 			->assertStatus(200);
 		$this->assertDatabaseHas('events', ['name' => $event->name]);

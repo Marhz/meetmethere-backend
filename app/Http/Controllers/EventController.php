@@ -31,20 +31,18 @@ class EventController extends Controller
     public function store(Request $request)
     {
         $user = JWTAuth::parseToken()->toUser();
-        // $this->validate($request, [
-        //     'name' => 'required',
-        //     'description' => 'required',
-        // ]);
         $data = $request->only([
             "name",
             "description",
             "address",
             "begin_at",
             "end_at",
+            "latitude",
+            "longitude"
         ]);
         $data['user_id'] = $user->id;
-        return $event = Event::create($data);
-        // return response()->json(['message' => 'Event created', 'data' => $event], 200);
+        $event = Event::create($data);
+        $event->save();
     }
 
     /**
@@ -96,6 +94,8 @@ class EventController extends Controller
             "address",
             "begin_at",
             "end_at",
+            "latitude",
+            "longitude"
         ]));
         return response()->json(['message' => 'Event updated', 'event' => $event], 200);
     }
