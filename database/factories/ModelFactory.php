@@ -28,8 +28,8 @@ $factory->define(App\Event::class, function(Faker\Generator $faker) use ($addres
 	$beginAt = $faker->dateTimeThisYear;
 	$endAt = $faker->dateTimeInInterval($beginAt, "+ 5 days");
 	$address = $addressBook[array_rand($addressBook)];
-    $lats = [48, 12, 24];
-    $lat = $lats[array_rand($lats)];
+    $lat = '48.8'.mt_rand(0, 99999);
+    $lng = '2.3'.mt_rand(0, 99999);
 	return [
 		'name' => $faker->sentence,
 		'description' => $faker->paragraph,
@@ -37,7 +37,7 @@ $factory->define(App\Event::class, function(Faker\Generator $faker) use ($addres
 		'begin_at' => $beginAt,
 		'end_at' => $endAt,
         'latitude' => $lat,
-        'longitude' => 2.1,
+        'longitude' => $lng,
 		'user_id' => function() {
 			return factory('App\User')->create()->id;
 		}

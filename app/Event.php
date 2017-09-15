@@ -35,4 +35,9 @@ class Event extends Model
     	))->pluck('id');
     	return static::whereIn('id', $ids)->get();
     }
+
+    public function participants()
+    {
+        return $this->belongsToMany('App\User', 'participations');
+    }
 }

@@ -17,13 +17,12 @@ class AuthTest extends TestCase
 	 */
 	function it_creates_a_user()
 	{
-		$user = make('App\User');
-		$data = $user->toArray();
-		$data['password'] = 1234;
-		$data['password_confirmation'] = 1234;
-		$this->json('post', route('auth.register'), $data)
+		$user = make('App\User')->toArray();
+		$user['password'] = 1234;
+		$user['password_confirmation'] = 1234;
+		$this->json('post', route('auth.register'), $user)
 			->assertStatus(201);
-		$this->assertDatabaseHas('users', ['email' => $user->email]);
+		$this->assertDatabaseHas('users', ['email' => $user['email']]);
 	}
 
 	/**
@@ -46,15 +45,5 @@ class AuthTest extends TestCase
 		$data = ['email' => $user->email, 'password' => 123];
 		$response = $this->json('post', route('auth.login'), $data)
 			->assertStatus(401);
-	}
-
-	/**
-	 * @test
-	 */
-	function it_recognize_the_token()
-	{
-		$this->setClientToken();
-		$response = $this->json('get', "http://meetmethere.dev/api/test?token={$this->userToken}")
-			->assertStatus(200);
 	}
 }

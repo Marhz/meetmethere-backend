@@ -36,4 +36,6 @@ Route::post('events/{event}/comments', "CommentController@store");
 Route::put('comments/edit', "CommentController@update")->name('comments.update');
 Route::delete('comments/{comment}/delete', 'CommentController@destroy')->name('comments.destroy');
 
+Route::post('events/{event}/participate', 'ParticipationController@store')->name('participate.store');
+Route::delete('events/{event}/participate/cancel', 'ParticipationController@destroy')->name('participate.destroy');
 // Route::get('/events', 'EventController@index')->name('event.index');
