@@ -46,4 +46,16 @@ class AuthTest extends TestCase
 		$response = $this->json('post', route('auth.login'), $data)
 			->assertStatus(401);
 	}
+
+	/**
+	 * @test
+	 */
+	function it_refreshes_expired_token()
+	{
+		$this->setClientToken();
+		$response = $this->json('get', route('token.refresh', ['token' => $this->userToken]))
+			->assertStatus(200);
+		dd($response->json());
+		$this->assertFalse(true);
+	}
 }

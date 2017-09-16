@@ -39,3 +39,5 @@ Route::delete('comments/{comment}/delete', 'CommentController@destroy')->name('c
 Route::post('events/{event}/participate', 'ParticipationController@store')->name('participate.store');
 Route::delete('events/{event}/participate/cancel', 'ParticipationController@destroy')->name('participate.destroy');
 // Route::get('/events', 'EventController@index')->name('event.index');
+
+Route::get('refreshToken', 'AuthenticateController@refresh')->name('token.refresh');

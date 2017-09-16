@@ -11,7 +11,7 @@ class AuthenticateController extends Controller
 {
 
 	public function __construct(){
-		$this->middleware('jwt.auth')->only(['test', 'logout']);
+		$this->middleware('jwt.auth')->only(['test']);
 	}
 
     public function register(Request $request)
@@ -55,7 +55,14 @@ class AuthenticateController extends Controller
 
     public function logout(Request $request)
     {
-		JWTAuth::invalidate();
+		// JWTAuth::invalidate();
 		return response()->json(['message' => 'Logged out successfully']);
+    }
+
+    public function refresh(Request $request)
+    {
+        $token = JWtAuth::refresh($request->input('token'));
+        return response()->json(['token' => $token]);
+        // return response()->json([], 401);
     }
 }

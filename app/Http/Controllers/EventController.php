@@ -42,7 +42,7 @@ class EventController extends Controller
         ]);
         $data['user_id'] = $user->id;
         $event = Event::create($data);
-        $event->save();
+        return response()->json(['message' => 'Event created successfully', 'id' => $event->id]);
     }
 
     /**
