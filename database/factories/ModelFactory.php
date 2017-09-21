@@ -38,6 +38,7 @@ $factory->define(App\Event::class, function(Faker\Generator $faker) use ($addres
 		'end_at' => $endAt,
         'latitude' => $lat,
         'longitude' => $lng,
+        'banner' => 'banners/default.jpg',
 		'user_id' => function() {
 			return factory('App\User')->create()->id;
 		}

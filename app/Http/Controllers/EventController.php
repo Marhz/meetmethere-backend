@@ -10,7 +10,7 @@ class EventController extends Controller
 {
 
     public function __construct(){
-        $this->middleware(['jwt.auth'])->only(['store', 'update', 'destroy']);
+        $this->middleware(['jwt.auth'])->only(['store', 'edit', 'update', 'destroy']);
     }
     /**
      * Display a listing of the resource.
@@ -19,7 +19,8 @@ class EventController extends Controller
      */
     public function index()
     {
-        return Event::all();
+        $events = Event::paginate(6);
+        return response()->json(['data' => $events]);
     }
 
     /**
@@ -30,6 +31,7 @@ class EventController extends Controller
      */
     public function store(Request $request)
     {
+        $this->validate($request, ['banner' => 'image']);
         $user = JWTAuth::parseToken()->toUser();
         $data = $request->only([
             "name",
@@ -40,8 +42,13 @@ class EventController extends Controller
             "latitude",
             "longitude"
         ]);
+        if ($request->hasFile('banner')) {
+            $path = $request->banner->store('public/banners');
+            $data['banner'] = $path;
+        }
         $data['user_id'] = $user->id;
         $event = Event::create($data);
+        $event->participants()->attach($user->id);
         return response()->json(['message' => 'Event created successfully', 'id' => $event->id]);
     }
 
@@ -53,7 +60,7 @@ class EventController extends Controller
      */
     public function show(Event $event)
     {
-        return response()->json(['data' => $event->load('participants')]);
+        return response()->json(['data' => $event->load('participants', 'creator')]);
     }
 
     /**
@@ -88,7 +95,7 @@ class EventController extends Controller
         if($user->id != $event->user_id) {
             return response()->json(['message' => 'access forbidden'], 403);
         }
-        $event->update($request->only([
+        $data = $request->only([
             "name",
             "description",
             "address",
@@ -96,8 +103,13 @@ class EventController extends Controller
             "end_at",
             "latitude",
             "longitude"
-        ]));
-        return response()->json(['message' => 'Event updated', 'event' => $event], 200);
+        ]);
+        if ($request->hasFile('banner')) {
+            $path = $request->banner->store('public/banners');
+            $data['banner'] = $path;
+        }
+        $event->update($data);
+        return response()->json(['message' => 'Event updated', 'id' => $event->id], 200);
     }
 
     /**
