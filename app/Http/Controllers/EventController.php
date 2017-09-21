@@ -19,7 +19,7 @@ class EventController extends Controller
      */
     public function index()
     {
-        $events = Event::paginate(6);
+        $events = Event::paginate(Event::PER_PAGE);
         return response()->json(['data' => $events]);
     }
 
@@ -31,7 +31,7 @@ class EventController extends Controller
      */
     public function store(Request $request)
     {
-        $this->validate($request, ['banner' => 'image']);
+        $this->validate($request, ['_banner' => 'image']);
         $user = JWTAuth::parseToken()->toUser();
         $data = $request->only([
             "name",
@@ -42,7 +42,7 @@ class EventController extends Controller
             "latitude",
             "longitude"
         ]);
-        if ($request->hasFile('banner')) {
+        if ($request->hasFile('_banner')) {
             $path = $request->banner->store('public/banners');
             $data['banner'] = $path;
         }

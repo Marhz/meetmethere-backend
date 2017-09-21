@@ -2,6 +2,7 @@
 
 namespace Tests\Feature;
 
+use App\Event;
 use Tests\TestCase;
 use Illuminate\Foundation\Testing\WithoutMiddleware;
 use Illuminate\Foundation\Testing\DatabaseMigrations;
@@ -16,10 +17,21 @@ class EventsApiTest extends TestCase
 	 */
 	function it_gets_all_events()
 	{
-		$events = create('App\Event', [], 10);
-		$response = $this->json('get', route('events.index'))
-			->assertStatus(200)
-			->assertJson($events->toArray());
+		$events = create('App\Event', [], Event::PER_PAGE * 3);
+		$response = $this->getJson(route('events.index'))
+			->assertStatus(200);
+		$responseArray = $response->getData()->data->data;
+		foreach ($responseArray as $key => $val) {
+			$responseArray[$key] = (array) $val;
+		}
+		$this->assertEquals($responseArray, array_slice($events->toArray(), 0, Event::PER_PAGE));
+		$response = $this->get(route('events.index', ['page' => 2]))
+			->assertStatus(200);
+		$responseArray = $response->getData()->data->data;
+		foreach ($responseArray as $key => $val) {
+			$responseArray[$key] = (array) $val;
+		}
+		$this->assertEquals($responseArray, array_slice($events->toArray(), Event::PER_PAGE , Event::PER_PAGE));
 	}
 
 	/**

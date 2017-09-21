@@ -7,6 +7,7 @@ use Illuminate\Support\Facades\Storage;
 
 class Event extends Model
 {
+    const PER_PAGE = 6;
 	protected $dates = ['begin_at', 'end_at'];
 	protected $fillable = [
 		"name",
@@ -52,7 +53,7 @@ class Event extends Model
 
     public function getBannerAttribute($banner)
     {
-        return $this->attributes['banner'] = Storage::url($this->attributes['banner']);
+        return Storage::url($this->attributes['banner']);
     }
 
     public function getParticipantsCountAttribute()
